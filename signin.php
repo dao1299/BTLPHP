@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<?php
+		include 'xulymenu.php';
+		?>
 	<title>S&N</title>
 	<link rel="shortcut icon" href="img/logo.ico">
 	<style type="text/css">
@@ -113,27 +116,30 @@
 				            echo "Bạn đã kết nối thất bại".mysqli_connect_erro();
 				        }	
 				}
-				$report="";
 				if (isset($_REQUEST['signin'])){
 					if ($_REQUEST['id']==''){
-						$report="Bạn chưa nhập username!";
+						showPopup("Bạn chưa nhập username!");
 					}
 					elseif ($_REQUEST['name']==''){
-						$report="Bạn chưa nhập tên của bạn!";
+						showPopup("Bạn chưa nhập tên của bạn!");
 					}else{
 						$id=$_REQUEST['id'];
 						$pw1=$_REQUEST['pw1'];
 						$pw2=$_REQUEST['pw2'];
 						$name=$_REQUEST['name'];
 						if ($pw1!=$pw2){
-							$report="Password không khớp";
+							showPopup("Password không khớp");
 						}else{
 							if (checkAccount($id)==true){
-								$report="Đã có người sử dụng username này!";
+								showPopup("Đã có người sử dụng username này!");
 							}
 							else{
 								$query="insert into info value ('$id','$pw1','$name','1')";
-								if (insert_db($query)==true) $report="Đăng ký thành công!";
+								if (insert_db($query)==true) 
+									{
+										showPopup("Đăng ký thành công!");
+										header('location: login.php');
+									}
 							}
 						}
 					}

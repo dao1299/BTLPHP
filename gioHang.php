@@ -100,7 +100,7 @@
 			<div>
 				<center>
 				<?php
-					echo $reportGH;
+					// echo $reportGH;
 				?>	
 				</center>
 				

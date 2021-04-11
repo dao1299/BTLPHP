@@ -31,6 +31,7 @@
 			location.href='Index.php';
 		}
 		function dangxuat(){
+			alert("Đăng xuất thành công!");
 			location.href="logout.php"
 		}
 		function login(){
@@ -480,19 +481,18 @@
 		$maSP=$_REQUEST['xoaSP'];
 		$rs=insert_db("DELETE FROM `gio_hang` WHERE ma_sp='$maSP' and user='$user'");
 		if ($rs){
-			$reportGH="Xoa san pham thanh cong";	
+			showPopup("Xoa san pham thanh cong");	
 		}
 		
 	}
 
 	$tongTien=mysqli_fetch_array(getDB("SELECT sum(gio_hang.so_luong*san_pham.gia_sp) as tong FROM `gio_hang`,san_pham WHERE user='$user' and san_pham.ma_sp=gio_hang.ma_sp"))[0];
-	$reportGH="";
 	if (isset($_REQUEST['xacnhan'])){
 		if (trim($_REQUEST['sdt'])==''){
-			$reportGH="Bạn chưa nhập sđt";
+			showPopup("Bạn chưa nhập sđt");
 		}
 		elseif (trim($_REQUEST['diachi'])==''){
-			$reportGH="Bạn chưa nhập địa chỉ";	
+			showPopup("Bạn chưa nhập địa chỉ");	
 		}
 		else{
 			$count=mysqli_num_rows(getDB("select * from hoa_don"))+1;
@@ -501,7 +501,7 @@
 			$queryHD="INSERT INTO `hoa_don`(`ma_hd`, `user`, `dia_chi`, `sdt`, `tong_tien`) VALUES ('$count','$user','$diachi','$sdt',$tongTien)";
 			$rs=insert_db($queryHD);
 			if ($rs>0){
-				$queryGH= "SELECT san_pham.ten_sp,hinh_anh_1,gio_hang.so_luong,san_pham.gia_sp,san_pham.ma_sp FROM san_pham,gio_hang WHERE gio_hang.user='slick' and gio_hang.ma_sp=san_pham.ma_sp";
+				$queryGH= "SELECT san_pham.ten_sp,hinh_anh_1,gio_hang.so_luong,san_pham.gia_sp,san_pham.ma_sp FROM san_pham,gio_hang WHERE gio_hang.user='$user' and gio_hang.ma_sp=san_pham.ma_sp";
                 $dat=getDB($queryGH);
                 while ($dat1=mysqli_fetch_array($dat)){
                     $tt=$dat1[2]*$dat1[3];
@@ -510,10 +510,10 @@
                     $queryDelGH="DELETE FROM `gio_hang` WHERE ma_sp='$dat1[4]' and user='$user'";
                     $rs2=insert_db($queryDelGH);
                     if ($rs1 && $rs2){
-                    	$reportGH="Bạn đã đặt hàng thành công";
+                    	showPopup("Bạn đã đặt hàng thành công");
                     }
                     else{
-                    	$reportGH="Hệ thống lỗi vui lòng thử lại";	
+                    	showPopup("Hệ thống lỗi vui lòng thử lại");	
                     }
                 }
 
@@ -522,5 +522,8 @@
 	}
 	else{
 		// $reportGH="";
+	}
+	function showPopup($mess){
+		echo "<script type='text/javascript'>alert('$mess');</script>";
 	}
 ?>

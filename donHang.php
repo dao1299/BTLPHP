@@ -35,7 +35,7 @@
     			<th>Chi tiết</th>
     		</tr>
     		<?php
-				$data=getDB("select * from hoa_don");
+				$data=getDB("select * from hoa_don where user='$user'");
 			    while ($data1=mysqli_fetch_array($data)){
 			    	?>
 			    	<tr>

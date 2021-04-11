@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<?php
+		include 'xulymenu.php'
+	?>
 	<title>S&N</title>
 	<link rel="shortcut icon" href="img/logo.ico">
 	<style type="text/css">
@@ -86,20 +89,21 @@
 ?>
 <?php
 	$report="";
-	session_start();
+	
 	if (isset($_REQUEST['login'])){
 		if (trim($_REQUEST['id']=='')){
-			$report="Bạn chưa nhập username";
+			showPopup("Bạn chưa nhập username");
 		}
 		else{
 			if (checkAccount($_REQUEST['id'],$_REQUEST['pw'])!=false){
 				$_SESSION['user']=$_REQUEST['id'];
 				$_SESSION['name']=checkAccount($_REQUEST['id'],$_REQUEST['pw']);
+				showPopup("Đăng nhập thành công!");
 				header("location: index.php");
 				//echo $_SESSION['user']." ".$_SESSION['name'];
 			}
 			else{
-				$report="Username hoặc password không đúng";
+				showPopup("Username hoặc password không đúng");
 			}
 		}
 	}elseif(isset($_REQUEST['signin'])){

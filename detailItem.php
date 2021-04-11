@@ -104,9 +104,7 @@
 	
 </script>
 <?php
-	function showPopup($mess){
-		echo "<script type='text/javascript'>alert('$mess');</script>";
-	}
+	
 	function checkGH($id){
 		$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
         if($conn)
