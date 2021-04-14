@@ -19,13 +19,21 @@
 			?>
 		</div>
 		<div id="logo"><input type="submit" name="goHome" value="S & N"></div>
-		<div id="logout" onclick="dangxuat();">
-			<?php
-				if (isset($_SESSION['name'])){
-					echo "Đăng xuất";
-				}
-			?>
+		<div class="qtv" style="margin-right: 20px">
+			<div style="display: inline; text-align: left;width: 50%;">
+				Quản trị
+			</div>
+			<div id="logout" onclick="dangxuat();" style="display: inline;text-align: right;width: 50%;float: right">
+				<?php
+					if (isset($_SESSION['name'])){
+						echo "Đăng xuất";
+					}
+				?>
+			</div>
+			
 		</div>
+		
+		
 		<script>
 		function home(){
 			location.href='Index.php';
@@ -525,5 +533,23 @@
 	}
 	function showPopup($mess){
 		echo "<script type='text/javascript'>alert('$mess');</script>";
+	}
+	function showSearch(){
+		?>
+		<div class="Search">
+			<div class="ElementSearch">
+				<input type="text" size="50" style="height: 38px;border-radius: 8px;  padding-left: 50px" name="keywordSearch">
+		        <input type="submit" name="submitSearch" style="width: 77px;height: 42px;border-radius: 5px;" value="Tìm kiếm">
+	        </div>
+		</div>
+		<?php
+	}
+	if (isset($_REQUEST['submitSearch'])){
+		if ($_REQUEST['keywordSearch']!=''){
+			$keyword=$_REQUEST['keywordSearch'];
+			$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham WHERE UPPER(ten_sp) LIKE UPPER('%$keyword%')";
+			echo $_SESSION['query'];
+			 header("location: index.php");
+		}
 	}
 ?>
