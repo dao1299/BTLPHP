@@ -20,8 +20,12 @@
 		</div>
 		<div id="logo"><input type="submit" name="goHome" value="S & N"></div>
 		<div class="qtv" style="margin-right: 20px">
-			<div style="display: inline; text-align: left;width: 50%;">
-				Quản trị
+			<div style="display: inline; text-align: left;width: 50%;" onclick="qtv();">
+				<?php
+					if (isset($_SESSION['quyen'])){
+						if ($_SESSION['quyen']==2) echo "Quản trị viên";
+					}
+				?>
 			</div>
 			<div id="logout" onclick="dangxuat();" style="display: inline;text-align: right;width: 50%;float: right">
 				<?php
@@ -38,6 +42,9 @@
 		function home(){
 			location.href='Index.php';
 		}
+		function qtv(){
+			location.href='quanLy.php';
+		}
 		function dangxuat(){
 			alert("Đăng xuất thành công!");
 			location.href="logout.php"
@@ -50,7 +57,7 @@
 		<?php
 	}
 	function getDB($query){
-		$connection = mysqli_connect("localhost", "root", "", "qlbdt");
+		$connection = mysqli_connect("localhost", "root", "", "dinhquangdao");
 		$result = mysqli_query($connection, $query);	
 		$connection=null;
 		if ($result){
@@ -62,7 +69,7 @@
 	}
 	function insert_db($query){
 		$conn=null;
-		$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
+		$conn=mysqli_connect('localhost','root','','dinhquangdao') or die("Không thể kết nối tới cơ sở dữ liệu");
 	        if($conn)
 	        {
 	        	mysqli_query($conn,"SET NAMES 'utf8'");
@@ -138,7 +145,7 @@
 						<?php echo $row[1];?>
 					</div>
 				</a>
-			</div>
+				</div>
                 <?php
             }
         }
@@ -231,7 +238,7 @@
 				<table>
 					<tr>
 						<td style="padding: 10px;">
-							<video src="/video/video.mp4" controls="controls" style="width: 350px;border: 5px solid green;" autoplay muted></video>
+							<video loop="loop" style="width: 350px;height: 200px;border: 5px solid green;" autoplay muted><source src="img/Video/Cotton.mp4" type="video/mp4"> </video>
 						</td>
 						<td>
 							<p>
@@ -391,14 +398,18 @@
 	}elseif (isset($_REQUEST['sanPham'])){
 		header("location: index.php");
 	}elseif (isset($_REQUEST['gioHang'])){
-		if (isset($user)){
+		if (isset($_SESSION['user'])){
 			header("location: gioHang.php");	
 		}else{
 			header("location: login.php");
 		}
 		
 	}elseif (isset($_REQUEST['donHang'])){
-		header("location: donHang.php");
+		if (isset($_SESSION['user'])){
+			header("location: donHang.php");	
+		}else{
+			header("location: login.php");
+		}
 	}elseif (isset($_REQUEST['12'])){
 		$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham, loai_dien_thoai WHERE loai_dien_thoai.ma_loai=san_pham.ma_loai and loai_dien_thoai.seri=12";
 		header("location: index.php");
@@ -436,15 +447,15 @@
 		$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham, loai_dien_thoai WHERE loai_dien_thoai.ma_loai=san_pham.ma_loai and loai_dien_thoai.phien_ban='Iphone XS Max'";
 		header("location: index.php");
 	}
-	$conn=mysqli_connect('localhost','root','','qlbdt') or die("Không thể kết nối tới cơ sở dữ liệu");
-        if($conn)
-        {
-        	mysqli_query($conn,"SET NAMES 'utf8'");
-        	$dataGHang=mysqli_query($conn,"SELECT san_pham.ten_sp,hinh_anh_1,gio_hang.so_luong,san_pham.gia_sp FROM san_pham,gio_hang WHERE gio_hang.user='$user' and gio_hang.ma_sp=san_pham.ma_sp");
-            //echo "Bạn đã kết nối thành công";
-        }else{
-            echo "Bạn đã kết nối thất bại".mysqli_connect_erro();
-        }
+	// $conn=mysqli_connect('localhost','root','','dinhquangdao') or die("Không thể kết nối tới cơ sở dữ liệu");
+ //        if($conn)
+ //        {
+ //        	mysqli_query($conn,"SET NAMES 'utf8'");
+ //        	$dataGHang=mysqli_query($conn,"SELECT san_pham.ten_sp,hinh_anh_1,gio_hang.so_luong,san_pham.gia_sp FROM san_pham,gio_hang WHERE gio_hang.user='$user' and gio_hang.ma_sp=san_pham.ma_sp");
+ //            //echo "Bạn đã kết nối thành công";
+ //        }else{
+ //            echo "Bạn đã kết nối thất bại".mysqli_connect_erro();
+ //        }
 	function showGioHang(){
 		global $user;
 		$tongTien=mysqli_fetch_array(getDB("SELECT sum(gio_hang.so_luong*san_pham.gia_sp) as tong FROM `gio_hang`,san_pham WHERE user='$user' and san_pham.ma_sp=gio_hang.ma_sp"))[0];
@@ -493,8 +504,10 @@
 		}
 		
 	}
+	if ($user!=''){
 
-	$tongTien=mysqli_fetch_array(getDB("SELECT sum(gio_hang.so_luong*san_pham.gia_sp) as tong FROM `gio_hang`,san_pham WHERE user='$user' and san_pham.ma_sp=gio_hang.ma_sp"))[0];
+	}
+	
 	if (isset($_REQUEST['xacnhan'])){
 		if (trim($_REQUEST['sdt'])==''){
 			showPopup("Bạn chưa nhập sđt");
@@ -503,6 +516,7 @@
 			showPopup("Bạn chưa nhập địa chỉ");	
 		}
 		else{
+			$tongTien=mysqli_fetch_array(getDB("SELECT sum(gio_hang.so_luong*san_pham.gia_sp) as tong FROM `gio_hang`,san_pham WHERE user='$user' and san_pham.ma_sp=gio_hang.ma_sp"))[0];	
 			$count=mysqli_num_rows(getDB("select * from hoa_don"))+1;
 			$diachi=$_REQUEST['diachi'];
 			$sdt=$_REQUEST['sdt'];
@@ -513,7 +527,7 @@
                 $dat=getDB($queryGH);
                 while ($dat1=mysqli_fetch_array($dat)){
                     $tt=$dat1[2]*$dat1[3];
-                    $queryCTHD="INSERT INTO `chi_tiet_hoa_don`(`ma_hd`, `ma_sp`, `so_luong`, `thanh_tien`) VALUES ('$count','$dat1[4]',$dat1[2],$tt)";
+                    $queryCTHD="INSERT INTO `chi_tiet_hoa_don`(`ma_hd`, `ma_sp`, `so_luong`, `giasp`, `thanh_tien`) VALUES ('$count','$dat1[4]',$dat1[2],$dat1[3],$tt)";
                     $rs1=insert_db($queryCTHD);
                     $queryDelGH="DELETE FROM `gio_hang` WHERE ma_sp='$dat1[4]' and user='$user'";
                     $rs2=insert_db($queryDelGH);
@@ -551,5 +565,72 @@
 			echo $_SESSION['query'];
 			 header("location: index.php");
 		}
+	}
+	function checkNum($s){
+		if (trim($s)==''){
+			return 1;
+		}
+		if (!is_numeric($s)){
+			return 2;
+		}
+		return 0;
+	}
+	function solutionLocSP($x,$y){
+		switch (checkNum($x)){
+			case 1:
+				$x=0;
+				break;
+			case 2:
+				showPopup("Bạn phải nhập số vào ô lọc giá");
+				break;
+			case 3:
+				break;
+		}
+		switch (checkNum($y)){
+			case 1:
+				$y=0;
+				break;
+			case 2:
+				showPopup("Bạn phải nhập số vào ô lọc giá");
+				break;
+			case 3:
+				break;
+		}
+		if ($x==0 && $y==0) return false;
+		if ($x==0){
+			$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham WHERE san_pham.gia_sp < $y";
+			header("location: index.php");		
+			return ;
+		}
+		if ($y==0){
+			$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham WHERE san_pham.gia_sp > $y";
+			header("location: index.php");		
+			return ;	
+		}
+		$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham WHERE san_pham.gia_sp BETWEEN $x and $y";
+		header("location: index.php");		
+		return ;	
+	}
+	function showOrder(){
+		?>
+		<div style="line-height: 30px" class="Order">
+				Bộ lọc sản phẩm <br>
+				<input type="submit" name="sapXepTang" value="&nbsp&nbsp&nbsp" id="sapxep1">
+				<input type="submit" name="sapXepGiam" value="&nbsp&nbsp&nbsp" id="sapxep2"><br>
+				Giá từ:&nbsp<input type="text" name="Low" size="10">&nbsptới&nbsp<input type="text" name="High" size="10">&nbsp&nbsp
+				<input type="submit" name="locsp" value="Lọc sản phẩm">
+			</div>
+		<?php
+	}
+	if (isset($_REQUEST['sapXepTang'])){
+		$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham order by san_pham.gia_sp limit 15";
+			header("location: index.php");		
+	}
+	if (isset($_REQUEST['sapXepGiam'])){
+		$_SESSION['query']="SELECT ma_sp,ten_sp,hinh_anh_1 FROM san_pham order by san_pham.gia_sp desc limit 15";
+			header("location: index.php");		
+	}
+	if (isset($_REQUEST['locsp'])){
+		solutionLocSP($_REQUEST['Low'],$_REQUEST['High']);
 	}
 ?>

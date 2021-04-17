@@ -26,7 +26,7 @@
 	<div class="content" style="">
 		<div class="content" style="width: 100%">
     	<table border="2" style="width: 100%;text-align: center;font-size: 30px" >
-    		<tr>
+    		<tr >
     			<th>Mã đơn</th>
     			<th>Địa chỉ</th>
     			<th>Số điện thoại</th>
@@ -66,7 +66,9 @@
     		</tr>
     		<?php
     		if ($detail!=""){
-    			$data=getDB("select san_pham.hinh_anh_1, san_pham.ma_sp, san_pham.ten_sp, san_pham.gia_sp, chi_tiet_hoa_don.so_luong, chi_tiet_hoa_don.thanh_tien, hoa_don.tong_tien from chi_tiet_hoa_don,hoa_don,san_pham where chi_tiet_hoa_don.ma_hd=$detail and san_pham.ma_sp=chi_tiet_hoa_don.ma_sp and chi_tiet_hoa_don.ma_hd=hoa_don.ma_hd");
+    			// echo "select san_pham.hinh_anh_1, san_pham.ma_sp, san_pham.ten_sp, chi_tiet_hoa_don.gia_sp, chi_tiet_hoa_don.so_luong, chi_tiet_hoa_don.thanh_tien, hoa_don.tong_tien from chi_tiet_hoa_don,hoa_don,san_pham where chi_tiet_hoa_don.ma_hd=$detail and san_pham.ma_sp=chi_tiet_hoa_don.ma_sp and chi_tiet_hoa_don.ma_hd=hoa_don.ma_hd";
+    			$data=getDB("select san_pham.hinh_anh_1, san_pham.ma_sp, san_pham.ten_sp, chi_tiet_hoa_don.giasp, chi_tiet_hoa_don.so_luong, chi_tiet_hoa_don.thanh_tien, hoa_don.tong_tien from chi_tiet_hoa_don,hoa_don,san_pham where chi_tiet_hoa_don.ma_hd=$detail and san_pham.ma_sp=chi_tiet_hoa_don.ma_sp and chi_tiet_hoa_don.ma_hd=hoa_don.ma_hd");
+
 			    while ($data1=mysqli_fetch_array($data)){
 			    	$tongTien=$data1[6];
 			    	?>

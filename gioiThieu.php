@@ -4,7 +4,7 @@
 	include 'xulymenu.php';
 ?>
 <head>
-	<title></title>
+	<title>Giới thiệu về S&N</title>
 	<link rel="stylesheet" type="text/css" href="layout.css">
 	<link rel="shortcut icon" href="img/logo.ico">
 </head>

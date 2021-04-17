@@ -338,5 +338,20 @@
 			min-height: 350px;
 			background-color: tan;
 		}
-
-		
+		.Order{
+			font-size: 20px;
+		}
+		.Order #sapxep1{
+			width: 50px;
+			background: url(./img/sortU.png) no-repeat;
+			background-position: center;
+			background-size: 25px;
+			border: none;
+		}
+		.Order #sapxep2{
+			width: 50px;
+			background: url(./img/sortD.png) no-repeat;
+			background-position: center;
+			background-size: 25px;
+			border: none;
+		}

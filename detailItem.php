@@ -4,10 +4,32 @@
 	include 'xulymenu.php';
 ?>
 <head>
+	<?php
+	
+	$img="";
+	$query='SELECT * FROM `san_pham` WHERE ma_sp="'.$_SESSION['detailItem'].'"';
+	$db=getDB($query);
+	$tenSP=$giaSP=$noiDung=$hinh1=$hinh2=$hinh3=$nd1=$nd2=$nd3="";
+	if ($db!=false) {
+	    while ($row=mysqli_fetch_array($db)) {
+	    	$maSP=$row[0];
+	        $tenSP=$row[1];
+	        $giaSP=$row[4];
+	        $hinh1=$row[5];
+	        $hinh2=$row[6];
+	        $hinh3=$row[7];
+	        $nd1=$row[8];
+	        $nd2=$row[9];
+	        $nd3=$row[10];
+	        // $nDung=$row[8]."<br>".$row[9]."<br>".$row[10]."<br>";
+	        
+	    }
+	}
+?>
 	<title>
+		Chi tiết sản phẩm 
 		<?php
-			$user=$_SESSION['user'];
-			echo $_SESSION['itemView'];
+			echo $tenSP;
 		?>
 	</title>
 	<link rel="shortcut icon" href="img/logo.ico">
@@ -78,35 +100,14 @@
 
 	</style>
 
-<?php
 	
-	$img="";
-	$query='SELECT * FROM `san_pham` WHERE ma_sp="'.$_SESSION['detailItem'].'"';
-	$db=getDB($query);
-	$tenSP=$giaSP=$noiDung=$hinh1=$hinh2=$hinh3=$nd1=$nd2=$nd3="";
-	if ($db!=false) {
-	    while ($row=mysqli_fetch_array($db)) {
-	    	$maSP=$row[0];
-	        $tenSP=$row[1];
-	        $giaSP=$row[4];
-	        $hinh1=$row[5];
-	        $hinh2=$row[6];
-	        $hinh3=$row[7];
-	        $nd1=$row[8];
-	        $nd2=$row[9];
-	        $nd3=$row[10];
-	        // $nDung=$row[8]."<br>".$row[9]."<br>".$row[10]."<br>";
-	        
-	    }
-	}
-?>	
 <script type="text/javascript">
 	
 </script>
 <?php
 	
 	function checkGH($id){
-		$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
+		$conn=mysqli_connect('localhost','root','','dinhquangdao') or die("Không thể kết nối tới cơ sở dữ liệu");
         if($conn)
         {
         	mysqli_query($conn,"SET NAMES 'utf8'");
@@ -132,13 +133,20 @@
 				if (insert_db($query)==true) showPopup("Thêm thành công!");
 			}
 			else{
-				$query="INSERT INTO `gio_hang` (`ma_sp`, `user`, `so_luong`) VALUES ('$maSP', '$user', '1');";
+				$query="INSERT INTO `gio_hang` (`ma_sp`, `user`, `so_luong`, `giasp`) VALUES ('$maSP', '$user', '1',$giaSP);";
 				if (insert_db($query)==true) showPopup("Thêm mới thành công!");
 			}
 		}
 		else{
 			header("location: login.php");
 		}
+		if (isset($_POST['xoadbSP'])) {
+		$qrXoaSP="delete from san_pham WHERE ma_sp='$maSP'";
+		if (insert_db($qrXoaSP)==true) {
+			showTB('Xoá sản phẩm thành công','index.php');
+			;
+		}
+	}
 	}
 ?>
 <body onload="changeImgItem()">
@@ -156,6 +164,16 @@
 				<div style="min-height: 20px"></div>
 				<div class="divAddItem">
 					<input type="submit" name="addSP" value="Thêm vào giỏ hàng">
+					<?php
+						if (isset($_SESSION['quyen'])){
+							if ($_SESSION['quyen']==2) {
+								?>
+								<input type="submit" name="xoadbSP" value="Xoá sản phẩm" onclick="return confirm('Bạn có chắc muốn xoá không?')">
+								<?php
+							}
+						}
+					?>
+					
 				</div>
 			</div>
 			<div class="DetailItem">
@@ -201,5 +219,6 @@
 			</div>
 		</div>
 	</form>
+	
 </body>
 </html>

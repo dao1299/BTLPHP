@@ -83,7 +83,7 @@
 			</form>
 			<?php
 				function checkAccount($id){
-					$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
+					$conn=mysqli_connect('localhost','root','','dinhquangdao') or die("Không thể kết nối tới cơ sở dữ liệu");
 			        if($conn)
 			        {
 			        	mysqli_query($conn,"SET NAMES 'utf8'");
@@ -99,23 +99,7 @@
 			            echo "Bạn đã kết nối thất bại".mysqli_connect_erro();
 			        }
 				}
-				function insert_db($query){
-					$conn=null;
-					$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
-				        if($conn)
-				        {
-				        	mysqli_query($conn,"SET NAMES 'utf8'");
-				        	$data=mysqli_query($conn,$query);
-				        	if ($data==1){
-				        		return true;
-				        	}
-				        	else{
-				        		return false;
-				        	}
-				        }else{
-				            echo "Bạn đã kết nối thất bại".mysqli_connect_erro();
-				        }	
-				}
+				
 				if (isset($_REQUEST['signin'])){
 					if ($_REQUEST['id']==''){
 						showPopup("Bạn chưa nhập username!");
@@ -153,9 +137,7 @@
 		</div>
 		<div class="report">
 			<?php
-				if ($report!=''){
-					echo $report;
-				} 
+				
 			?>
 		</div>
 	</div>

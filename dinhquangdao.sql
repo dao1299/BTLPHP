@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 11, 2021 lúc 12:13 PM
+-- Thời gian đã tạo: Th4 17, 2021 lúc 10:22 AM
 -- Phiên bản máy phục vụ: 10.4.17-MariaDB
 -- Phiên bản PHP: 8.0.1
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `qlbdt`
+-- Cơ sở dữ liệu: `dinhquangdao`
 --
 
 -- --------------------------------------------------------
@@ -31,6 +31,7 @@ CREATE TABLE `chi_tiet_hoa_don` (
   `ma_hd` varchar(10) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `ma_sp` varchar(10) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `so_luong` int(10) UNSIGNED NOT NULL,
+  `giasp` int(11) UNSIGNED NOT NULL,
   `thanh_tien` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
@@ -38,13 +39,14 @@ CREATE TABLE `chi_tiet_hoa_don` (
 -- Đang đổ dữ liệu cho bảng `chi_tiet_hoa_don`
 --
 
-INSERT INTO `chi_tiet_hoa_don` (`ma_hd`, `ma_sp`, `so_luong`, `thanh_tien`) VALUES
-('1', 'SP002', 1, 18000000),
-('1', 'SP006', 11, 264000000),
-('1', 'SP009', 1, 39000000),
-('1', 'SP011', 1, 18000000),
-('1', 'SP021', 1, 15000000),
-('2', 'SP011', 1, 18000000);
+INSERT INTO `chi_tiet_hoa_don` (`ma_hd`, `ma_sp`, `so_luong`, `giasp`, `thanh_tien`) VALUES
+('1', 'SP011', 3, 18000000, 54000000),
+('2', 'SP003', 1, 22000000, 22000000),
+('2', 'SP004', 1, 20000000, 20000000),
+('2', 'SP010', 2, 16000000, 32000000),
+('2', 'SP011', 1, 10000000, 10000000),
+('3', 'SP002', 1, 18000000, 18000000),
+('4', 'SP001', 2, 16000000, 32000000);
 
 -- --------------------------------------------------------
 
@@ -55,16 +57,9 @@ INSERT INTO `chi_tiet_hoa_don` (`ma_hd`, `ma_sp`, `so_luong`, `thanh_tien`) VALU
 CREATE TABLE `gio_hang` (
   `ma_sp` varchar(6) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `user` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
-  `so_luong` int(11) NOT NULL
+  `so_luong` int(11) NOT NULL,
+  `giasp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
-
---
--- Đang đổ dữ liệu cho bảng `gio_hang`
---
-
-INSERT INTO `gio_hang` (`ma_sp`, `user`, `so_luong`) VALUES
-('SP013', 'slick', 1),
-('SP020', 'slick', 1);
 
 -- --------------------------------------------------------
 
@@ -78,16 +73,19 @@ CREATE TABLE `hoa_don` (
   `dia_chi` varchar(100) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `sdt` varchar(10) COLLATE utf8mb4_vietnamese_ci NOT NULL,
   `ngay_mua` datetime NOT NULL DEFAULT current_timestamp(),
-  `tong_tien` bigint(20) UNSIGNED NOT NULL
+  `tong_tien` bigint(20) UNSIGNED NOT NULL,
+  `da_ban` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_vietnamese_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `hoa_don`
 --
 
-INSERT INTO `hoa_don` (`ma_hd`, `user`, `dia_chi`, `sdt`, `ngay_mua`, `tong_tien`) VALUES
-('1', 'slick', 'ha noi', '83213712', '2021-04-11 08:31:39', 354000000),
-('2', 'slick', 'ha nam', '0123289', '2021-04-11 08:35:23', 18000000);
+INSERT INTO `hoa_don` (`ma_hd`, `user`, `dia_chi`, `sdt`, `ngay_mua`, `tong_tien`, `da_ban`) VALUES
+('1', 'slick', 'huong son', '83213712', '2021-04-16 15:28:22', 54000000, NULL),
+('2', 'slick', 'ha noi', '09038213', '2021-04-17 14:27:07', 84000000, NULL),
+('3', 'ngoc', 'ha noi', '0712646172', '2021-04-17 14:28:31', 18000000, NULL),
+('4', 'ngoc', 'ha noi', '83213712', '2021-04-17 14:29:03', 32000000, NULL);
 
 -- --------------------------------------------------------
 
@@ -107,10 +105,15 @@ CREATE TABLE `info` (
 --
 
 INSERT INTO `info` (`user`, `password`, `ho_ten`, `phan_quyen`) VALUES
+('abc', 'abc', 'abc', 1),
 ('admin1', 'admin', 'admin', 2),
+('admin2', 'admin2', 'Quản trị viên', 2),
+('dao1299', 'dao1299', 'dao', 1),
 ('guest', 'guest', '1232131', 1),
+('ngoc', 'ngoc', 'le thi ngoc', 1),
 ('pppp', '', 'name', 1),
-('slick', 'slick', 'Đinh Quang Đạo', 1);
+('slick', 'slick', 'Đinh Quang Đạo', 1),
+('thanh', '123', 'thanh', 1);
 
 -- --------------------------------------------------------
 
@@ -188,7 +191,7 @@ INSERT INTO `san_pham` (`ma_sp`, `ten_sp`, `ma_loai`, `da_ban`, `gia_sp`, `hinh_
 ('SP008', 'iPhone 12 Pro Max 256GB', 'ML008', 12, 32000000, '.\\img\\12pm\\256\\1.jpg', '.\\img\\12pm\\256\\2.jpg', '.\\img\\12pm\\256\\3.jpg', 'Năm nay, công nghệ màn hình trên 12 Pro Max cũng được đổi mới và trang bị tốt hơn cùng kích thước lên đến 6.7 inch, lớn hơn nhiều so với điện thoại iPhone 12 Mini. Với công nghệ màn hình OLED cho khả năng hiển thị hình ảnh lên đến 2778 x 1284 pixels. Bên cạnh đó, màn hình này còn cho độ sáng tối đa cao nhất lên đến 800 nits, luôn đảm bảo cho bạn một độ sáng cao và dễ nhìn nhất ngoài nắng', 'Một điểm đổi mới nữa trên màn hình của chiếc điện thoại iPhone 12 năm nay là việc chúng được thiết kế với khung viền vuông vức, viền thép không gỉ mang đến vẻ đẹp sang trọng cho điện thoại. Máy cũng được trang bị nhiều phiên bản màu sắc đặc biệt cho người dùng lựa chọn.', 'Về trang bị phần cứng bên trong thì iPhone 12 Pro Max có một thanh RAM lên đến 6GB. Điều này cho thấy rằng Apple ngày đang lắng nghe người dùng nhiều hơn khi trang bị một dung lượng RAM lớn hơn để việc đa nhiệm ngày càng được cải thiện hơn. Việc thanh ram lớn giúp cho bạn trải nghiệm các tựa game và đa nhiệm mượt mà hơn'),
 ('SP009', 'iPhone 12 Pro Max 512GB', 'ML009', 23, 39000000, '.\\img\\12pm\\512\\1.jpg', '.\\img\\12pm\\512\\2.jpg', '.\\img\\12pm\\512\\3.jpg', 'Năm nay, công nghệ màn hình trên 12 Pro Max cũng được đổi mới và trang bị tốt hơn cùng kích thước lên đến 6.7 inch, lớn hơn nhiều so với điện thoại iPhone 12 Mini. Với công nghệ màn hình OLED cho khả năng hiển thị hình ảnh lên đến 2778 x 1284 pixels. Bên cạnh đó, màn hình này còn cho độ sáng tối đa cao nhất lên đến 800 nits, luôn đảm bảo cho bạn một độ sáng cao và dễ nhìn nhất ngoài nắng', 'Một điểm đổi mới nữa trên màn hình của chiếc điện thoại iPhone 12 năm nay là việc chúng được thiết kế với khung viền vuông vức, viền thép không gỉ mang đến vẻ đẹp sang trọng cho điện thoại. Máy cũng được trang bị nhiều phiên bản màu sắc đặc biệt cho người dùng lựa chọn.', 'Về trang bị phần cứng bên trong thì iPhone 12 Pro Max có một thanh RAM lên đến 6GB. Điều này cho thấy rằng Apple ngày đang lắng nghe người dùng nhiều hơn khi trang bị một dung lượng RAM lớn hơn để việc đa nhiệm ngày càng được cải thiện hơn. Việc thanh ram lớn giúp cho bạn trải nghiệm các tựa game và đa nhiệm mượt mà hơn'),
 ('SP010', 'iPhone 11 64GB', 'ML010', 75, 16000000, '.\\img\\11\\64\\1.jpg', '.\\img\\11\\64\\2.jpg', '.\\img\\11\\64\\3.jpg', 'Apple vừa tung ra iPhone 11 nâng cấp cho iPhone XR năm ngoái, nâng cấp lên 2 camera sau trong cụm hình vuông và có 6 màu mới trong đó có xanh lục và tím. Điểm khác biệt đáng chú ý là logo Apple được đặt ở chính giữa mặt sau của máy.\r\n\r\niPhone 11 vẫn trang bị màn hình LCD 6.1 inch mà Apple gọi là Liquid Retina và phần khung viền nhôm. Đúng như dự đoán, mặt sau logo Apple đã được đưa v ề chính giữa và không còn sự xuất hiện của chữ “iPhone”. Độ phân giải giải tương tự như trên iPhone XR 1792×828 pixel. Mật độ điểm ảnh của máy là 326 PPI', 'iPhone 11 được trang bị 2 Camera sau, cả 2 đều có độ phân giải 12MP, camera thứ 2 gọi là Ultra Wide với góc siêu rộng cho chúng ta có trải nghiệm tốt hơn trong việc chụp phong cảnh. Chế độ Ultra Wide có thêm tuỳ chọn trong phần giao diện camera. Khi chụp một bức ảnh bao gồm 7 tấm khác nhau để cho ra một tấm tốt nhất và tất nhiên có hỗ trợ Machine Learning. Camera trước cũng được cải tiến 12MP có hỗ trợ quay phim 4K và Slow Motion (120 fps) để cho ra những video ấn tượng. Điều này sẽ thích hợp với những bạn nữ hay chụp selfie hoặc vlogger, chúng ta không còn lo lắng việc camera trước có chất lượng kém nữa.', 'iPhone 11 có khả năng chống nước ở độ sâu 2m với thời gian khoảng 30 phút.  Nhiều người dùng YouTube đã đưa tính năng này vào thử nghiệm và cho đến nay nó vẫn hoạt động hoàn hảo như lời quảng cáo của Apple. Với sự tiến bộ nhanh chóng của công nghệ, một số blogger công nghệ dự đoán rằng Apple có thể triển khai một loại đầu đọc dấu vân tay mới (có thể tích hợp vào màn hình iPhone như trên một số điện thoại Android hiện nay). Tuy nhiên, Kuo – nhà phân tích tại TF International Securities lại không nghĩ rằng khả năng này sẽ xảy ra.'),
-('SP011', 'iPhone 11 128GB', 'ML011', 64, 18000000, '.\\img\\11\\128\\1.jpg', '.\\img\\11\\128\\2.jpg', '.\\img\\11\\128\\3.jpg', 'Apple vừa tung ra iPhone 11 nâng cấp cho iPhone XR năm ngoái, nâng cấp lên 2 camera sau trong cụm hình vuông và có 6 màu mới trong đó có xanh lục và tím. Điểm khác biệt đáng chú ý là logo Apple được đặt ở chính giữa mặt sau của máy.\r\n\r\niPhone 11 vẫn trang bị màn hình LCD 6.1 inch mà Apple gọi là Liquid Retina và phần khung viền nhôm. Đúng như dự đoán, mặt sau logo Apple đã được đưa v ề chính giữa và không còn sự xuất hiện của chữ “iPhone”. Độ phân giải giải tương tự như trên iPhone XR 1792×828 pixel. Mật độ điểm ảnh của máy là 326 PPI', 'iPhone 11 được trang bị 2 Camera sau, cả 2 đều có độ phân giải 12MP, camera thứ 2 gọi là Ultra Wide với góc siêu rộng cho chúng ta có trải nghiệm tốt hơn trong việc chụp phong cảnh. Chế độ Ultra Wide có thêm tuỳ chọn trong phần giao diện camera. Khi chụp một bức ảnh bao gồm 7 tấm khác nhau để cho ra một tấm tốt nhất và tất nhiên có hỗ trợ Machine Learning. Camera trước cũng được cải tiến 12MP có hỗ trợ quay phim 4K và Slow Motion (120 fps) để cho ra những video ấn tượng. Điều này sẽ thích hợp với những bạn nữ hay chụp selfie hoặc vlogger, chúng ta không còn lo lắng việc camera trước có chất lượng kém nữa.', 'iPhone 11 có khả năng chống nước ở độ sâu 2m với thời gian khoảng 30 phút.  Nhiều người dùng YouTube đã đưa tính năng này vào thử nghiệm và cho đến nay nó vẫn hoạt động hoàn hảo như lời quảng cáo của Apple. Với sự tiến bộ nhanh chóng của công nghệ, một số blogger công nghệ dự đoán rằng Apple có thể triển khai một loại đầu đọc dấu vân tay mới (có thể tích hợp vào màn hình iPhone như trên một số điện thoại Android hiện nay). Tuy nhiên, Kuo – nhà phân tích tại TF International Securities lại không nghĩ rằng khả năng này sẽ xảy ra.'),
+('SP011', 'iPhone 11 128GB', 'ML011', 64, 10000000, '.\\img\\11\\128\\1.jpg', '.\\img\\11\\128\\2.jpg', '.\\img\\11\\128\\3.jpg', 'Apple vừa tung ra iPhone 11 nâng cấp cho iPhone XR năm ngoái, nâng cấp lên 2 camera sau trong cụm hình vuông và có 6 màu mới trong đó có xanh lục và tím. Điểm khác biệt đáng chú ý là logo Apple được đặt ở chính giữa mặt sau của máy.\r\n\r\niPhone 11 vẫn trang bị màn hình LCD 6.1 inch mà Apple gọi là Liquid Retina và phần khung viền nhôm. Đúng như dự đoán, mặt sau logo Apple đã được đưa v ề chính giữa và không còn sự xuất hiện của chữ “iPhone”. Độ phân giải giải tương tự như trên iPhone XR 1792×828 pixel. Mật độ điểm ảnh của máy là 326 PPI', 'iPhone 11 được trang bị 2 Camera sau, cả 2 đều có độ phân giải 12MP, camera thứ 2 gọi là Ultra Wide với góc siêu rộng cho chúng ta có trải nghiệm tốt hơn trong việc chụp phong cảnh. Chế độ Ultra Wide có thêm tuỳ chọn trong phần giao diện camera. Khi chụp một bức ảnh bao gồm 7 tấm khác nhau để cho ra một tấm tốt nhất và tất nhiên có hỗ trợ Machine Learning. Camera trước cũng được cải tiến 12MP có hỗ trợ quay phim 4K và Slow Motion (120 fps) để cho ra những video ấn tượng. Điều này sẽ thích hợp với những bạn nữ hay chụp selfie hoặc vlogger, chúng ta không còn lo lắng việc camera trước có chất lượng kém nữa.', 'iPhone 11 có khả năng chống nước ở độ sâu 2m với thời gian khoảng 30 phút.  Nhiều người dùng YouTube đã đưa tính năng này vào thử nghiệm và cho đến nay nó vẫn hoạt động hoàn hảo như lời quảng cáo của Apple. Với sự tiến bộ nhanh chóng của công nghệ, một số blogger công nghệ dự đoán rằng Apple có thể triển khai một loại đầu đọc dấu vân tay mới (có thể tích hợp vào màn hình iPhone như trên một số điện thoại Android hiện nay). Tuy nhiên, Kuo – nhà phân tích tại TF International Securities lại không nghĩ rằng khả năng này sẽ xảy ra.'),
 ('SP012', 'iPhone 11 256GB', 'ML012', 90, 20000000, '.\\img\\11\\256\\1.jpg', '.\\img\\11\\256\\2.jpg', '.\\img\\11\\256\\3.jpg', 'Apple vừa tung ra iPhone 11 nâng cấp cho iPhone XR năm ngoái, nâng cấp lên 2 camera sau trong cụm hình vuông và có 6 màu mới trong đó có xanh lục và tím. Điểm khác biệt đáng chú ý là logo Apple được đặt ở chính giữa mặt sau của máy.\r\n\r\niPhone 11 vẫn trang bị màn hình LCD 6.1 inch mà Apple gọi là Liquid Retina và phần khung viền nhôm. Đúng như dự đoán, mặt sau logo Apple đã được đưa v ề chính giữa và không còn sự xuất hiện của chữ “iPhone”. Độ phân giải giải tương tự như trên iPhone XR 1792×828 pixel. Mật độ điểm ảnh của máy là 326 PPI', 'iPhone 11 được trang bị 2 Camera sau, cả 2 đều có độ phân giải 12MP, camera thứ 2 gọi là Ultra Wide với góc siêu rộng cho chúng ta có trải nghiệm tốt hơn trong việc chụp phong cảnh. Chế độ Ultra Wide có thêm tuỳ chọn trong phần giao diện camera. Khi chụp một bức ảnh bao gồm 7 tấm khác nhau để cho ra một tấm tốt nhất và tất nhiên có hỗ trợ Machine Learning. Camera trước cũng được cải tiến 12MP có hỗ trợ quay phim 4K và Slow Motion (120 fps) để cho ra những video ấn tượng. Điều này sẽ thích hợp với những bạn nữ hay chụp selfie hoặc vlogger, chúng ta không còn lo lắng việc camera trước có chất lượng kém nữa.', 'iPhone 11 có khả năng chống nước ở độ sâu 2m với thời gian khoảng 30 phút.  Nhiều người dùng YouTube đã đưa tính năng này vào thử nghiệm và cho đến nay nó vẫn hoạt động hoàn hảo như lời quảng cáo của Apple. Với sự tiến bộ nhanh chóng của công nghệ, một số blogger công nghệ dự đoán rằng Apple có thể triển khai một loại đầu đọc dấu vân tay mới (có thể tích hợp vào màn hình iPhone như trên một số điện thoại Android hiện nay). Tuy nhiên, Kuo – nhà phân tích tại TF International Securities lại không nghĩ rằng khả năng này sẽ xảy ra.'),
 ('SP013', 'iPhone 11 Pro 64GB', 'ML013', 75, 19000000, '.\\img\\11p\\64\\1.jpg', '.\\img\\11p\\64\\2.jpg', '.\\img\\11p\\64\\3.jpg', 'Điểm đầu tiên iPhone 11 Pro tạo ấn tượng với mình là cụm 3 camera được nằm trong khung vuông, khác biệt hoàn toàn so với thiết kế camera trên iPhone X. Tuy nhiên, cụm camera của iPhone 11 Pro sẽ mỏng hơn so với iPhone X. Nếu bạn không thích thiết kế cụm camera khung vuông thì chắc chắn bạn sẽ không thể ưng ý sản phẩm nào trong bộ ba siêu phẩm iPhone 11, iPhone 11 Pro và iPhone 11 Pro Max của Apple.\r\niPhone 11 Pro được Apple trang bị khung thép không gỉ, cùng mặt lưng là kính cường lực giúp tăng độ bền cho máy. Một điểm hạn chế nhỏ của mặt lưng kính cường lực là khả năng bám vân tay. Tuy nhiên, cũng chính nhờ mặt lưng là kính cường lực bạn sẽ dễ dàng trong việc vệ sinh máy, hạn chế các bám bụi bẩn khi bạn sử dụng trong thời gian dài.', 'Màn hình của iPhone 11 Pro cũ có kích thước 5,8inh, với độ phân giải là 2.436 x 1.125 pixels và vẫn giữ nguyên thiết kế màn hình “tai thỏ”. Đặc biệt, iPhone 11 Pro được Apple trang bị tấm nền OLED, cao cấp hơn hẳn tấm nên LCD ở iPhone 11. Màn hình OLED cho hiển thị sắc nét, có chiều sâu, giúp bạn có những giây phút trải nghiệm tuyệt vời cho người dùng IOS.\r\nNếu trước đây bạn chưa từng dùng bất kì một chiếc iPhone nào có màn hình \"tai thỏ\" thì mới đầu có thể bạn sẽ cảm thấy hơi khó chịu với thiết kế màn hình này. Tuy nhiên, sau khoảng 2 ngày sử dụng bạn sẽ quen với thiết kế này ngay thôi.', 'Tại thời điểm ra mắt, iPhone 11 Pro tự hào cùng iPhone 11 và iPhone 11 Pro Max khi chạy hệ điều hành IOS 13. Nếu bạn đang băn khoăn “Liệu iPhone 11 Pro cũ có lên được IOS 14” thì bạn hoàn toàn yên tâm nhé. Với con chip Apple A13 - mạnh nhất hiện nay thì IOS 14 không thể làm khó iPhone 11 Pro cho dù bạn có mua iPhone 11 Pro cũ đi chăng nữa.\r\nNhắc đến hiệu năng thì không phải tự nhiên người ta lại ví iPhone 11 Pro mạnh ngang máy tính. Bởi Apple trang bị con chip A13 mạnh mẽ, được các chuyên gia đánh giá vượt mặt cả Kirin 980 hay Snapdragon 855 của Qualcomm.\r\nSau 1 thời gian sử dụng, mình thấy các tác vụ game mobile nặng và HOT nhất hiện nay thì iPhone 11 Pro cũ đều cho những trải nghiệm mượt mà, hầu như không có độ trễ khi thao tác. '),
 ('SP014', 'iPhone 11 Pro 256GB', 'ML014', 90, 21000000, '.\\img\\11p\\256\\1.jpg', '.\\img\\11p\\256\\2.jpg', '.\\img\\11p\\256\\3.jpg', 'Điểm đầu tiên iPhone 11 Pro tạo ấn tượng với mình là cụm 3 camera được nằm trong khung vuông, khác biệt hoàn toàn so với thiết kế camera trên iPhone X. Tuy nhiên, cụm camera của iPhone 11 Pro sẽ mỏng hơn so với iPhone X. Nếu bạn không thích thiết kế cụm camera khung vuông thì chắc chắn bạn sẽ không thể ưng ý sản phẩm nào trong bộ ba siêu phẩm iPhone 11, iPhone 11 Pro và iPhone 11 Pro Max của Apple.\r\niPhone 11 Pro được Apple trang bị khung thép không gỉ, cùng mặt lưng là kính cường lực giúp tăng độ bền cho máy. Một điểm hạn chế nhỏ của mặt lưng kính cường lực là khả năng bám vân tay. Tuy nhiên, cũng chính nhờ mặt lưng là kính cường lực bạn sẽ dễ dàng trong việc vệ sinh máy, hạn chế các bám bụi bẩn khi bạn sử dụng trong thời gian dài.', '', 'Tại thời điểm ra mắt, iPhone 11 Pro tự hào cùng iPhone 11 và iPhone 11 Pro Max khi chạy hệ điều hành IOS 13. Nếu bạn đang băn khoăn “Liệu iPhone 11 Pro cũ có lên được IOS 14” thì bạn hoàn toàn yên tâm nhé. Với con chip Apple A13 - mạnh nhất hiện nay thì IOS 14 không thể làm khó iPhone 11 Pro cho dù bạn có mua iPhone 11 Pro cũ đi chăng nữa.\r\nNhắc đến hiệu năng thì không phải tự nhiên người ta lại ví iPhone 11 Pro mạnh ngang máy tính. Bởi Apple trang bị con chip A13 mạnh mẽ, được các chuyên gia đánh giá vượt mặt cả Kirin 980 hay Snapdragon 855 của Qualcomm.\r\nSau 1 thời gian sử dụng, mình thấy các tác vụ game mobile nặng và HOT nhất hiện nay thì iPhone 11 Pro cũ đều cho những trải nghiệm mượt mà, hầu như không có độ trễ khi thao tác. '),

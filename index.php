@@ -23,10 +23,10 @@
 		}
 	</script>
 <?php
-	if (isset($_REQUEST['item'])){
-		$_SESSION['itemView']=$_REQUEST['item'][0];
-		header("location: detailItem.php");
-	}
+	// if (isset($_REQUEST['item'])){
+	// 	$_SESSION['itemView']=$_REQUEST['item'][0];
+	// 	header("location: detailItem.php");
+	// }
 ?>
 </head>
 <style type="text/css">
@@ -56,66 +56,26 @@
 			<div class="title">
 				<p>APPLE - AUTHORISED RESELLER</p>
 			</div >
+			<?php 
+				showOrder(); 
+			?>
 			<div class="contentSPI">
-			<!-- <form action="#" method="post"> -->
 				<div>
 				<?php
 					if (isset($_SESSION['query'])){
 						showItem($_SESSION['query']);
 					}
-					else{
+					else{			
 						showItem("select ma_sp,ten_sp,hinh_anh_1 FROM san_pham limit 15");	
 					}
 				?>	
 			</div>
-			<!-- </form>	 -->
 			</div>
 		</div>
-		<!-- <div style="min-height: 100px">
-			
-		</div> -->
+		
 		<?php
 			 showFooter();
 		?>
-		<!-- <table>
-					<tr>
-						<td>
-							<h3 >Chăm sóc khách hàng</h3>
-							<ul>
-								<li ><a href="">Trung tâm trợ giúp</a></li>
-								<li ><a href="" >S&N Mall</a></li>
-								<li ><a href="" >Hướng dẫn mua hàng</a></li>
-							</ul>
-						</td>
-						<td >
-							<h3 >Về S&N</h3>
-							<ul >
-								<li ><a href="" >Giới thiệu</a></li>
-								<li ><a href="" >Tuyển dụng</a></li>
-								<li ><a href="" >Điều khoản</a></li>
-							</ul>
-						</td>
-						<td >
-							<h3 >Theo dõi chúng tôi trên</h3>
-							<ul >
-								<li ><a href="https://www.facebook.com/profile.php?id=100007096803730" >Facebook</a></li>
-								<li ><a href="https://www.facebook.com/imslickzz" >Instagram</a></li>
-								<li ><a href="" >LinkIn</a></li>
-	
-							</ul>
-							
-						</td>
-						<td >
-							<h3 >Vào cửa hàng trên ứng dụng</h3>
-							<img src="img/ma.png" width="100px" height="100px">
-						</td>
-					</tr>
-					<tr >
-						<td>
-							<center><p style="color:#737373">© 2015 - Bản quyền thuộc về S&N</p></center>
-						</td>
-					</tr>
-				</table> -->
 	</form>
 </body>
 </html>

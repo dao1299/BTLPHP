@@ -69,7 +69,7 @@
 </head>
 <?php
 	function checkAccount($id,$pw){
-		$conn=mysqli_connect('localhost','root','','QLBDT') or die("Không thể kết nối tới cơ sở dữ liệu");
+		$conn=mysqli_connect('localhost','root','','dinhquangdao') or die("Không thể kết nối tới cơ sở dữ liệu");
         if($conn)
         {
         	mysqli_query($conn,"SET NAMES 'utf8'");
@@ -77,6 +77,7 @@
         	$data=mysqli_query($conn,$query);
         	if (mysqli_num_rows($data)==1){
         		$dt1=mysqli_fetch_array($data);
+        		$_SESSION['quyen']=$dt1[3];
         		return $dt1[2];
         	}
         	else{
@@ -109,6 +110,9 @@
 	}elseif(isset($_REQUEST['signin'])){
 		header('location: signin.php');
 	}
+	if (isset($_REQUEST['goHome'])){
+		header('location: index.php');
+	}
 ?>
 <body>
 	<div class="content">
@@ -120,13 +124,14 @@
 				<input type="password" name="pw" placeholder="Password"><br>
 				<input type="submit" name="login" value="Login">
 				<input type="submit" name="signin" value="Signin">
+				<input type="submit" value="Back to home" name="goHome"><br>
 			</form>
 		</div>
 		<div class="report">
 			<?php
-				if ($report!=''){
-					echo $report;
-				} 
+				// if ($report!=''){
+				// 	echo $report;
+				// } 
 			?>
 		</div>
 	</div>
