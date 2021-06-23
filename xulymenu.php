@@ -479,6 +479,7 @@
                             <center><img width="50px" height="100px" src="<?php echo $data1[1];?>"></center>
                             <?php echo $data1[0]; ?>    
                         </th>
+                       
     					<th><?php echo $data1[2]; ?></th>		
                         <th><?php echo $data1[3]; ?></th>       
                         <th><a href="?xoaSP=<?php echo $data1[4];?>">Xóa</a></th>
@@ -489,12 +490,14 @@
 			</table>
 			<br>
 			<div>
+				
 				<div style="display: inline;">Tổng tiền:</div>
 				<div style="display: inline" id="tinhtien"><?php echo $tongTien; ?></div>	
 			</div>
 		</div>
 	</div>
 		<?php
+		
 	}
 	if (isset($_REQUEST['xoaSP'])){
 		$maSP=$_REQUEST['xoaSP'];

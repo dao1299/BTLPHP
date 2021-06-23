@@ -92,7 +92,6 @@
 						<input type="text" name="diachi" placeholder="Nhập địa chỉ giao hàng" id="diaChiGiaoHang">
 					</td>
 				</tr>
-
 			</table>
 			<br>
 			<input type="submit" name="xacnhan" value="Xác nhận đặt hàng" id="confirm">
